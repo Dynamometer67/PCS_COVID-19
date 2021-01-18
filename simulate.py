@@ -4,10 +4,16 @@
 from sir_model import SIR_model
 from gui import GUI
 import tkinter as tk
+from visualize2 import visualize
 
 def create_and_run():
     model = SIR_model()
     model.run()
+
+def run_and_visualize():
+    model = SIR_model()
+    S, I, R = model.run()
+    visualize(S)
 
 if __name__ == "__main__":
     # model = SIR_model()
@@ -29,4 +35,5 @@ if __name__ == "__main__":
     # Alternatively, for testing and stuff, you can alter the values of the
     # model here without using the GUI. Simply comment anything GUI related
     # from the above code and uncomment the code below.
-    create_and_run()
+    # create_and_run()
+    run_and_visualize()
