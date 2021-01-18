@@ -14,11 +14,12 @@ class SIR_model:
         self.masks = masks
         self.vaccinated = vaccinated
         self.vaccine_effect = vaccine_effect
-        self.growth_rate = 0.000002
+        self.growth_rate = 0.2
 
         # Not adjustable by the user
         self.recovery_rate = 0.1
         self.death_rate = 0.015
+        self.N = S + I + R
         # 0.5 because most masks have an efficiency of 50%
         # self.mask_coefficient = self.masks * 0.5
 
@@ -34,21 +35,22 @@ class SIR_model:
 
     def step(self):
         """This method runs a single step in the simulation."""
+        print(self.S, self.I, self.R)
         self.S += self.dS()
         self.I += self.dI()
         self.R += self.dR()
         self.t += 1
         # if self.t % 5 == 0:
         print("Susceptible: ", str(self.S))
-            # print("Infected: ", str(self.I))
-            # print("Recovered: ", str(self.R))
-        # print("Total: ", str((self.S + self.I + self.R)))
+        print("Infected: ", str(self.I))
+        print("Recovered: ", str(self.R))
+        print("Total: ", str((self.S + self.I + self.R)))
 
     def dS(self):
         """Calculates the difference in the amount of susceptible people for
         a single timestep."""
         # print(-self.growth_rate * self.mask_coefficient() * self.S * self.I)
-        return int(-self.growth_rate * self.S * self.I)
+        return -self.growth_rate * self.S * self.I / self.N
 
     def dI(self):
         """Calculates the difference in the amount of infected people for
@@ -58,7 +60,7 @@ class SIR_model:
     def dR(self):
         """Calculates the difference in the amount of recovered/dead people for
         a single timestep."""
-        return int(self.recovery_rate * self.I)
+        return self.recovery_rate * self.I
 
     def show_results(self):
         """When the simulation is over, this method can be used to visualize
