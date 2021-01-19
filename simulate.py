@@ -13,7 +13,7 @@ def create_and_run():
 def run_and_visualize():
     model = SIR_model()
     S, I, R = model.run()
-    visualize(S)
+    visualize(S, "Lol")
 
 if __name__ == "__main__":
     # model = SIR_model()

@@ -3,7 +3,7 @@ import numpy as np
 from scipy.integrate import odeint
 
 class SIR_model:
-    def __init__(self, S0=999, I0=10, R0=0, t0=0, t_max=160, vaccinated=0.0,
+    def __init__(self, S0=999, I0=10, R0=0, t0=0, t_max=150, vaccinated=0.0,
             vaccine_effect=0.95, mask_coverage=0.8, mask_efficacy=0.2):
         """This method initiates the SIR model. In this model, S is the amount
         of people susceptible to the virus, I the amount of infected and R the
@@ -15,7 +15,7 @@ class SIR_model:
         self.t = np.linspace(t0, t_max, t_max - t0 + 1)
         self.C_mask = mask_efficacy * mask_coverage
         self.vacc = vaccinated
-        self.vacc_eff = vacc_effect
+        self.vacc_eff = vaccine_effect
         print(self.mask())
         self.growth_rate = 0.2 * self.mask()
         self.recovery_rate = 0.1
