@@ -1,4 +1,5 @@
 import tkinter as tk
+from inspect import getargspec
 
 class GUI:
     def __init__(self, model, title):
@@ -51,7 +52,7 @@ class GUI:
         from the entries."""
         new_params = self.get_entries()
         for name, val in new_params:
-            vars(self.model)[name] = val
+            vars(self.model)[name] = float(val)
 
     def ok(self):
         """Defines what happens when the user presses the 'OK' button"""
