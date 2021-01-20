@@ -38,7 +38,7 @@ class SIR_model:
         self.N = self.S0 + self.I0 + self.R0
         self.beta = self.growth_rate * self.mask_factor()
 
-        self.S, self.I, self.R =
+        self.S, self.I, self.R = \
                 odeint(self.deriv, [self.S0, self.I0, self.R0], self.t).T
 
     def deriv(self, y, t):
