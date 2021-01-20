@@ -5,7 +5,8 @@ from scipy.integrate import odeint
 class SIR_model:
     def __init__(self, S0=999, I0=1, R0=0, t0=0, t_max=160, growth_rate=0.2,
             recovery_rate=0.1, vaccinated=0.0, vaccine_efficacy=0.95,
-            mask_coverage=0.0, mask_efficacy=0.0):
+            mask_coverage=0.0, mask_efficacy=0.0, cm_thresh_low=0.25,
+            cm_thresh_med=0.5, cm_thresh_high=0.75):
         """This method initiates the SIR model. In this model, S is the amount
         of people susceptible to the virus, I the amount of infected and R the
         amount of recovered or dead people."""
@@ -23,7 +24,7 @@ class SIR_model:
         self.mask_eff = mask_efficacy
         # self.adjustable = [("S0", "S0"), ("I0", "I0"), ("R0", "R0"),
         #         ("t0", "t0"), ("t_max", "t_max"), ("vaccinated", "vacc"),
-        #         ("vaccine_efficacy", "vacc_eff"), ("mask_coverage", "mask_cov"), 
+        #         ("vaccine_efficacy", "vacc_eff"), ("mask_coverage", "mask_cov"),
         #         ("mask_efficacy", "mask_eff")]
         # self.death_rate = 0.015
 
