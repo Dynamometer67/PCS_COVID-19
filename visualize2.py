@@ -3,11 +3,11 @@ from matplotlib import pyplot as plt
 
 # def find_max(S, I, R):
 def visualize(S, I, R, t_max):
-    for i in range(t_max):
+    for i in range(t_max + 1):
         t = np.linspace(0, i, num=i)
-        y_s = S[:i+1]
-        y_i = I[:i+1]
-        y_r = R[:i+1]
+        y_s = S[:i]
+        y_i = I[:i]
+        y_r = R[:i]
 
         plt.plot(t, y_s, 'r-', label="Susceptible")
         plt.plot(t, y_i, 'b-', label="Infected")
@@ -22,7 +22,7 @@ def visualize(S, I, R, t_max):
         plt.legend()
         plt.draw()
         plt.pause(0.00001)
-        if i is not (t_max - 1):
+        if i is not t_max:
             plt.clf()
         else:
             plt.show()
