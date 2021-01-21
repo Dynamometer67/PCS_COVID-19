@@ -2,21 +2,27 @@ import numpy as np
 from matplotlib import pyplot as plt
 
 
-def visualize(numbers, title):
-    for i in range(np.size(numbers)):
-        y = numbers[:(i + 2)]
-        x = np.linspace(0, np.size(y), num=np.size(y))
-        plt.plot(x, y, 'r-', label=title)
+def visualize(S, I, R, t_max):
+    for i in range(t_max):
+        t = np.linspace(0, i, num=i)
+        y_s = S[:i]
+        y_i = I[:i]
+        y_r = R[:i]
+
+        plt.plot(t, y_s, 'r-', label="Susceptible")
+        plt.plot(t, y_i, 'b-', label="Infected")
+        plt.plot(t, y_r, 'g-', label="Recovered")
+
         plt.xlabel('Time (days)')
         plt.ylabel('Cases')
-        plt.title('Graph of ' + title)
-        plt.xlim(0, np.size(numbers))
-        plt.ylim(min(numbers), max(numbers) + max(numbers))
-        plt.text(0.5, max(numbers) + 0.0016 * max(numbers), 'Cases: ' + str(int(y[i])))
+        plt.title('SIR simulation of COVID-19 spread')
+        plt.xlim(0, t_max)
+        plt.ylim(0, 1000)
+        # plt.text(0.5, max(numbers) + 0.0016 * max(numbers), 'Cases: ' + str(int(y[i])))
         plt.legend()
         plt.draw()
         plt.pause(0.00001)
-        if i is not (np.size(numbers) - 1):
+        if i is not (t_max - 1):
             plt.clf()
         else:
             plt.show()
