@@ -11,13 +11,16 @@ def visualize(numbers, title):
         plt.ylabel('Cases')
         plt.title('Graph of ' + title)
         plt.xlim(0, np.size(numbers))
-        plt.ylim(min(numbers), max(numbers) + 1)
-        plt.text(0.5, max(y) + 0.0016 * max(y), 'Cases: ' + str(int(y[i])))
+        plt.ylim(min(numbers), max(numbers) + max(numbers))
+        plt.text(0.5, max(numbers) + 0.0016 * max(numbers), 'Cases: ' + str(int(y[i])))
         plt.legend()
         plt.draw()
         plt.pause(0.00001)
-        plt.clf()
+        if i is not (np.size(numbers) - 1):
+            plt.clf()
+        else:
+            plt.show()
+
 
     # x_numbers = np.linspace(1, np.size(numbers), num=np.size(numbers))
     # plt.plot(x_numbers, numbers
-    plt.show()

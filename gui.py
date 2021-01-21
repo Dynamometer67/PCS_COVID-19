@@ -57,7 +57,7 @@ class GUI:
     def ok(self):
         """Defines what happens when the user presses the 'OK' button"""
         self.entries_to_model()
-        self.root.quit()
+        self.root.destroy()
 
     def add_buttons(self):
         """Adds an 'OK' and a 'Quit' button to the GUI."""

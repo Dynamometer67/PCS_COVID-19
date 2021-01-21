@@ -3,7 +3,7 @@ import numpy as np
 from scipy.integrate import odeint
 
 class SIR_model:
-    def __init__(self, S0=999, I0=1, R0=0, t0=0, t_max=160, growth_rate=0.2,
+    def __init__(self, S0=999, I0=1, R0=0, t0=0, t_max=100, growth_rate=0.2,
             recovery_rate=0.1, vaccinated=0.0, vaccine_efficacy=0.95,
             mask_coverage=0.0, mask_efficacy=0.0, cm_thresh_low=0.25,
             cm_thresh_med=0.5, cm_thresh_high=0.75):
@@ -48,7 +48,7 @@ class SIR_model:
     def dS(self, S, I):
         """Calculates the difference in the amount of susceptible people for
         a single timestep."""
-        return -self.growth_rate * (S * I / self.N)
+        return -self.beta * (S * I / self.N)
 
     def dI(self, S, I):
         """Calculates the difference in the amount of infected people for
