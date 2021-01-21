@@ -30,6 +30,9 @@ def visualize(S, I, R, t_max):
         plt.legend()
         plt.draw()
         plt.pause(0.00001)
+
+        if not plt.get_fignums():
+            break
         if i is not t_max:
             plt.clf()
         else:
