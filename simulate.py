@@ -14,21 +14,21 @@ def create_and_run():
 def run_and_visualize():
     model = SIR_model()
     model.run()
-    visualize(model.S, "Lol")
+    visualize(model.S, model.I, model.R)
 
 if __name__ == "__main__":
     model = SIR_model()
-    
-    gui = GUI(model, "COVID-19 Simulation")
-    # After this, the GUI has updated the values of the parameters of the model
-    # and you can start working with the model.
-    gui.start()
+
+    # gui = GUI(model, "COVID-19 Simulation")
+    # # After this, the GUI has updated the values of the parameters of the model
+    # # and you can start working with the model.
+    # gui.start()
     try:
         # Put here what happens when the GUI succeeds.
         # results = gui.get_entries()
         # print(results)
         model.run()
-        visualize(model.S, "Lol")
+        visualize(model.S, model.I, model.R, 100)
     except tk.TclError:
         # Put here what happens when the user quits the GUI (without pressing
         # the OK button).
