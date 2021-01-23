@@ -28,7 +28,10 @@ if __name__ == "__main__":
         # results = gui.get_entries()
         # print(results)
         model.run()
-        visualize(model.S, model.I, model.R, 100)
+        # print(model.S)
+        # visualize(model.S, model.I, model.R, model.t_max)
+        # model.add_stochasticity()
+        visualize(model.S, model.I, model.R, model.t_max)
     except tk.TclError:
         # Put here what happens when the user quits the GUI (without pressing
         # the OK button).
