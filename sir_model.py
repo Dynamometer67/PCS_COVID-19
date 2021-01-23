@@ -3,7 +3,7 @@ import numpy as np
 from scipy.integrate import odeint
 
 class SIR_model:
-    def __init__(self, S0=999, I0=10, R0=0, t_max=100, growth_rate=0.2,
+    def __init__(self, S0=999, I0=10, R0=0, t_max=200, growth_rate=0.2,
                  recovery_rate=0.1, mask_coverage=0.0, mask_efficacy=0.0,
                  stochastic=1.0):
         """This method initiates the SIR model. In this model, S is the amount
@@ -129,11 +129,11 @@ class SIR_model:
     #
     #     print(self.S + self.I + self.R)
 
-    def dW(self, dX, mu, sigma_factor):
-        dW = np.random.normal(mu, abs(sigma_factor * dX))
-        if (dX >= 0 and dW > dX) or (dX <= 0 and dW < dX):
+    def noise(self, dX, mu, sigma_factor):
+        noise = np.random.normal(mu, abs(sigma_factor * dX))
+        if (dX >= 0 and noise > dX) or (dX <= 0 and noise < dX):
             return dX
-        return dW
+        return noise
 
     def euler_maruyama(self):
         """
@@ -153,8 +153,8 @@ class SIR_model:
             dS = self.dS(self.S[i-1], self.I[i-1])
             dI = self.dI(self.S[i-1], self.I[i-1])
             dR = self.dR(self.I[i-1])
-            S_noise = self.dW(dS, mu, sigma_factor)
-            R_noise = self.dW(dR, mu, sigma_factor)
+            S_noise = self.noise(dS, mu, sigma_factor)
+            R_noise = self.noise(dR, mu, sigma_factor)
 
             self.S[i] = self.S[i-1] + dS + S_noise
             self.I[i] = self.I[i-1] + dI - S_noise - R_noise
