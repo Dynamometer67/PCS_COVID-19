@@ -4,17 +4,7 @@
 from sir_model import SIR_model
 from gui import GUI
 import tkinter as tk
-import time
-from visualize2 import visualize
 
-def create_and_run():
-    model = SIR_model()
-    model.run()
-
-def run_and_visualize():
-    model = SIR_model()
-    model.run()
-    visualize(model.S, model.I, model.R)
 
 if __name__ == "__main__":
     model = SIR_model()
@@ -25,20 +15,9 @@ if __name__ == "__main__":
     # gui.start()
     try:
         # Put here what happens when the GUI succeeds.
-        # results = gui.get_entries()
-        # print(results)
         model.run()
-        # print(model.S)
-        # visualize(model.S, model.I, model.R, model.t_max)
-        # model.add_stochasticity()
-        visualize(model.S, model.I, model.R, model.t_max)
+        model.visualize("SIR simulation of COVID-19 spread", save=False)
     except tk.TclError:
         # Put here what happens when the user quits the GUI (without pressing
         # the OK button).
         print("aaaaaaaaaaaaaaaaa")
-
-    # Alternatively, for testing and stuff, you can alter the values of the
-    # model here without using the GUI. Simply comment anything GUI related
-    # from the above code and uncomment the code below.
-    # create_and_run()
-    # run_and_visualize()

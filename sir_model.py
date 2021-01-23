@@ -1,6 +1,11 @@
 # This file defines a class for an SIR model
 import numpy as np
 from scipy.integrate import odeint
+from matplotlib import pyplot as plt
+
+def find_max(S, I, R):
+    max = np.array([S, I, R])
+    return np.max(max)
 
 class SIR_model:
     def __init__(self, S0=10**6, I0=1000, R0=0, t_max=150, growth_rate=0.4,
@@ -160,13 +165,43 @@ class SIR_model:
             self.I[i] = self.I[i-1] + dI - S_noise - R_noise
             self.R[i] = self.R[i-1] + dR + R_noise
 
-
     def show_results(self):
         """When the simulation is over, this method can be used to visualize
         the results of the simulation."""
         pass
 
-    def visualize(self):
+    def visualize(self, title, save=False):
         """This method can be used to visualize the simulation while it is
         running."""
-        pass
+        max_number = find_max(self.S, self.I, self.R)
+
+        for i in range(1, self.t_max + 1):
+            t = np.linspace(0, i, num=i+1)
+
+            y_s = self.S[:i+1]
+            y_i = self.I[:i+1]
+            y_r = self.R[:i+1]
+
+            plt.plot(t, y_s, 'b-', label="Susceptible: " + str(int(y_s[-1])))
+            plt.plot(t, y_i, 'r-', label="Infected: " + str(int(y_i[-1])))
+            plt.plot(t, y_r, 'g-', label="Recovered: " + str(int(y_r[-1])))
+
+            plt.xlabel('Time (days)')
+            plt.ylabel('Cases')
+            plt.title(title)
+            plt.xlim(0, self.t_max)
+            plt.ylim(0, max_number + 0.05 * max_number)
+
+            plt.legend()
+            plt.draw()
+            plt.pause(0.00001)
+
+            if not plt.get_fignums():
+                break
+
+            if i < self.t_max:
+                plt.clf()
+            else:
+                if save:
+                    plt.savefig("images/fig3.svg")
+                plt.show()
