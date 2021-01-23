@@ -165,14 +165,32 @@ class SIR_model:
             self.I[i] = self.I[i-1] + dI - S_noise - R_noise
             self.R[i] = self.R[i-1] + dR + R_noise
 
-    def show_results(self):
+    def plot_SIR(self, t, S, I, R, title, max_number):
+        plt.plot(t, S, 'b-', label="Susceptible: " + str(int(S[-1])))
+        plt.plot(t, I, 'r-', label="Infected: " + str(int(I[-1])))
+        plt.plot(t, R, 'g-', label="Recovered: " + str(int(R[-1])))
+
+        plt.xlabel('Time (days)')
+        plt.ylabel('Cases')
+        plt.title(title)
+        plt.xlim(0, self.t_max)
+        plt.ylim(0, max_number + 0.05 * max_number)
+        plt.legend()
+
+    def show_results(self, title, save=False, figname=None):
         """When the simulation is over, this method can be used to visualize
         the results of the simulation."""
-        pass
+        max_number = find_max(self.S, self.I, self.R)
+        self.plot_SIR(self.t, self.S, self.I, self.R, title, max_number)
 
-    def visualize(self, title, save=False):
-        """This method can be used to visualize the simulation while it is
-        running."""
+        if save:
+            if not figname:
+                figname = "fig"
+            plt.savefig("images/" + figname + ".svg")
+        plt.show()
+
+    def visualize(self, title):
+        """This method can be used to visualize the simulation step by step."""
         max_number = find_max(self.S, self.I, self.R)
 
         for i in range(1, self.t_max + 1):
@@ -182,17 +200,8 @@ class SIR_model:
             y_i = self.I[:i+1]
             y_r = self.R[:i+1]
 
-            plt.plot(t, y_s, 'b-', label="Susceptible: " + str(int(y_s[-1])))
-            plt.plot(t, y_i, 'r-', label="Infected: " + str(int(y_i[-1])))
-            plt.plot(t, y_r, 'g-', label="Recovered: " + str(int(y_r[-1])))
+            self.plot_SIR(t, y_s, y_i, y_r, title, max_number)
 
-            plt.xlabel('Time (days)')
-            plt.ylabel('Cases')
-            plt.title(title)
-            plt.xlim(0, self.t_max)
-            plt.ylim(0, max_number + 0.05 * max_number)
-
-            plt.legend()
             plt.draw()
             plt.pause(0.00001)
 
@@ -202,6 +211,4 @@ class SIR_model:
             if i < self.t_max:
                 plt.clf()
             else:
-                if save:
-                    plt.savefig("images/fig3.svg")
                 plt.show()

@@ -16,7 +16,9 @@ if __name__ == "__main__":
     try:
         # Put here what happens when the GUI succeeds.
         model.run()
-        model.visualize("SIR simulation of COVID-19 spread", save=False)
+        model.show_results("SIR simulation of COVID-19 spread", save=True, \
+                figname="fig5")
+        # model.visualize("SIR simulation of COVID-19 spread")
     except tk.TclError:
         # Put here what happens when the user quits the GUI (without pressing
         # the OK button).
