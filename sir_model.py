@@ -3,9 +3,9 @@ import numpy as np
 from scipy.integrate import odeint
 
 class SIR_model:
-    def __init__(self, S0=999, I0=10, R0=0, t_max=100, growth_rate=0.2,
-                 recovery_rate=0.1, mask_coverage=0.0, mask_efficacy=0.0,
-                 stochastic=1.0):
+    def __init__(self, S0=10**6, I0=1000, R0=0, t_max=150, growth_rate=0.4,
+                 recovery_rate=0.1, mask_coverage=1.0, mask_efficacy=0.4,
+                 stochastic=0.0):
         """This method initiates the SIR model. In this model, S is the amount
         of people susceptible to the virus, I the amount of infected and R the
         amount of recovered or dead people."""
