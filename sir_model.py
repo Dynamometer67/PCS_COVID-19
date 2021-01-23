@@ -165,10 +165,18 @@ class SIR_model:
             self.I[i] = self.I[i-1] + dI - S_noise - R_noise
             self.R[i] = self.R[i-1] + dR + R_noise
 
-    def plot_SIR(self, t, S, I, R, title, max_number):
-        plt.plot(t, S, 'b-', label="Susceptible: " + str(int(S[-1])))
-        plt.plot(t, I, 'r-', label="Infected: " + str(int(I[-1])))
-        plt.plot(t, R, 'g-', label="Recovered: " + str(int(R[-1])))
+    def plot_SIR(self, t, S, I, R, title, max_number, animated=False):
+        S_label = "Susceptible"
+        I_label = "Infected"
+        R_label = "Recovered"
+        if animated:
+            S_label += ": " + str(int(S[-1]))
+            I_label += ": " + str(int(I[-1]))
+            R_label += ": " + str(int(R[-1]))
+
+        plt.plot(t, S, 'b-', label=S_label)
+        plt.plot(t, I, 'r-', label=I_label)
+        plt.plot(t, R, 'g-', label=R_label)
 
         plt.xlabel('Time (days)')
         plt.ylabel('Cases')
@@ -200,7 +208,7 @@ class SIR_model:
             y_i = self.I[:i+1]
             y_r = self.R[:i+1]
 
-            self.plot_SIR(t, y_s, y_i, y_r, title, max_number)
+            self.plot_SIR(t, y_s, y_i, y_r, title, max_number, animated=True)
 
             plt.draw()
             plt.pause(0.00001)

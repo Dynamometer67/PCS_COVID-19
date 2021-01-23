@@ -19,6 +19,7 @@ if __name__ == "__main__":
         model.show_results("SIR simulation of COVID-19 spread", save=True, \
                 figname="fig5")
         # model.visualize("SIR simulation of COVID-19 spread")
+        print("Total infected: " + str(model.R + model.I))
     except tk.TclError:
         # Put here what happens when the user quits the GUI (without pressing
         # the OK button).
