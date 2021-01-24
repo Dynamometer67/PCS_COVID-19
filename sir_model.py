@@ -8,9 +8,8 @@ def find_max(S, I, R):
     return np.max(max)
 
 class SIR_model:
-    def __init__(self, S0=10**6, I0=1000, R0=0, t_max=150, growth_rate=0.4,
-                 recovery_rate=0.1, mask_coverage=1.0, mask_efficacy=0.4,
-                 stochastic=0.0):
+    def __init__(self, S0=10**6, I0=10**3, R0=0, t_max=150, growth_rate=0.4,
+                 rec_rate=0.1, mask_cov=0.0, mask_eff=0.0, stochastic=0.0):
         """This method initiates the SIR model. In this model, S is the amount
         of people susceptible to the virus, I the amount of infected and R the
         amount of recovered or dead people."""
@@ -20,9 +19,9 @@ class SIR_model:
         self.R0 = R0
         self.t_max = t_max
         self.growth_rate = growth_rate
-        self.rec_rate = recovery_rate
-        self.mask_cov = mask_coverage
-        self.mask_eff = mask_efficacy
+        self.rec_rate = rec_rate
+        self.mask_cov = mask_cov
+        self.mask_eff = mask_eff
         self.stochastic = stochastic
 
     def mask_factor(self):
@@ -183,6 +182,7 @@ class SIR_model:
         plt.title(title)
         plt.xlim(0, self.t_max)
         plt.ylim(0, max_number + 0.05 * max_number)
+        plt.ticklabel_format(axis="y", style="sci", scilimits=(0,3))
         plt.legend()
 
     def show_results(self, title, save=False, figname=None):
