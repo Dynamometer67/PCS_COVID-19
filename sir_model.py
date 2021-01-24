@@ -9,7 +9,7 @@ def find_max(S, I, R):
 
 class SIR_model:
     def __init__(self, S0=10**6, I0=10**3, R0=0, t_max=150, growth_rate=0.4,
-                 rec_rate=0.1, mask_cov=0.0, mask_eff=0.0, stochastic=0.0):
+                 rec_rate=0.1, mask_cov=0.0, mask_eff=0.0, stochastic=1.0):
         """This method initiates the SIR model. In this model, S is the amount
         of people susceptible to the virus, I the amount of infected and R the
         amount of recovered or dead people."""
@@ -133,10 +133,17 @@ class SIR_model:
     #
     #     print(self.S + self.I + self.R)
 
-    def noise(self, dX, mu, sigma_factor):
-        noise = np.random.normal(mu, abs(sigma_factor * dX))
-        if (dX >= 0 and noise > dX) or (dX <= 0 and noise < dX):
-            return dX
+    def noise(self, dX, mu, sigma_factor, X):
+        sigma = min(abs(sigma_factor * dX), abs(0.1 * self.N))
+        noise = np.random.normal(mu, sigma)
+        new_X = X + dX + noise
+
+        if new_X > self.N:
+            return self.N - (X + dX)
+        if new_X < 0:
+            return -(X + dX)
+        if abs(noise) > abs(dX):
+            return dX if abs(noise + dX) == abs(noise) + abs(dX) else -dX
         return noise
 
     def euler_maruyama(self):
@@ -157,8 +164,8 @@ class SIR_model:
             dS = self.dS(self.S[i-1], self.I[i-1])
             dI = self.dI(self.S[i-1], self.I[i-1])
             dR = self.dR(self.I[i-1])
-            S_noise = self.noise(dS, mu, sigma_factor)
-            R_noise = self.noise(dR, mu, sigma_factor)
+            S_noise = self.noise(dS, mu, sigma_factor, self.S[i-1])
+            R_noise = self.noise(dR, mu, sigma_factor, self.R[i-1])
 
             self.S[i] = self.S[i-1] + dS + S_noise
             self.I[i] = self.I[i-1] + dI - S_noise - R_noise

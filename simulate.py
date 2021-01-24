@@ -55,7 +55,7 @@ def visualize_mask_eff(figname=None):
 
 
 if __name__ == "__main__":
-    model = SIR_model(mask_cov=0.95, rec_rate=1, growth_rate=4, mask_eff=0.0, t_max=150)
+    model = SIR_model(mask_cov=0.95, rec_rate=0.1, growth_rate=0.4, mask_eff=0.0, t_max=150)
 
     # gui = GUI(model, "COVID-19 Simulation")
     # # After this, the GUI has updated the values of the parameters of the model
