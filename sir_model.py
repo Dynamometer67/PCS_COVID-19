@@ -1,8 +1,9 @@
 # -----------------------------------------------------------------------------
-# Jesse van den Berge - XXXXXXXX
+# Jesse van den Berge - 12410241
 # Mark van Hofwegen   - 12378348
 #
 # This file contains the main SIR model for this project.
+# -----------------------------------------------------------------------------
 
 import numpy as np
 from scipy.integrate import odeint
@@ -10,7 +11,7 @@ from matplotlib import pyplot as plt
 
 
 def find_max(S, I, R):
-    """This method finds the maximum number out of all three arrays."""
+    """This function finds the maximum number out of all three arrays."""
     max = np.array([S, I, R])
     return np.max(max)
 
@@ -18,9 +19,14 @@ def find_max(S, I, R):
 class SIR_model:
     def __init__(self, S0=10**6, I0=10**3, R0=0, t_max=150, growth_rate=0.4,
                  rec_rate=0.1, mask_cov=0.0, mask_eff=0.0, stochastic=1.0):
-        """This method initiates the SIR model. In this model, S is the amount
-        of people susceptible to the virus, I the amount of infected and R the
-        amount of recovered or dead people."""
+        """This method initiates the SIR model. In this model, S0 is the
+        initial amount of people susceptible to the virus, I0 the amount of
+        infected and R0 the amount of recovered or dead people. t_max is the
+        amount of timesteps. growth_rate indicates how easily the virus
+        spreads. rec_rate means how many of the infected move to recovered
+        every timestep. mask_cov means the amount of people wearing mouth masks
+        and mask_eff means how effective those masks are. stochastic is used
+        to indicate whether the model is stochastic or not."""
         self.S0 = S0
         self.I0 = I0
         self.R0 = R0
@@ -40,7 +46,10 @@ class SIR_model:
 
 
     def run(self):
-        """This method runs the simulation of the model."""
+        """This method runs the simulation of the model. When the simulation is
+        done, arrays containing the values for S, I and R at every timestep are
+        put into self.S, self.I and self.R respectively."""
+        self.t_max = int(self.t_max)
         self.t = np.linspace(0, self.t_max, self.t_max + 1)
         self.N = self.S0 + self.I0 + self.R0
         self.beta = self.growth_rate * self.mask_factor()
@@ -50,145 +59,103 @@ class SIR_model:
         else:
             self.run_ODEs()
 
+
     def run_ODEs(self):
+        """Computes the values for S, I and R at every timestep"""
         self.S, self.I, self.R = \
                 odeint(self.step, [self.S0, self.I0, self.R0], self.t).T
 
+
     def step(self, y, t):
+        """Computes a single step for the non-stochastic model. y is a list or
+        tuple containing the values for S, I and R in that order. t is the
+        array of timestamps. t is not used in this method, but this method
+        is used for scipy.integrate.odeint, which requires a function or method
+        to take these parameters."""
         S, I, R = y
         dS = self.dS(S, I)
         dI = self.dI(S, I)
         dR = self.dR(I)
 
-        # print(dS)
-
-        # if self.stochastic:
-        # S_noise = self.step_noise(dS)
-        # R_noise = self.step_noise(dR)
-        # dS += S_noise
-        # dI -= S_noise + R_noise
-        # dR += R_noise
-
-        # print(dS)
-        # print(y)
-
-        # if t < 3:
-        #     print("a")
-            # print("dS = " + str(dS) + " and S = " + str(S))
-            # print("dI = " + str(dI) + " and I = " + str(I))
-            # print("dR = " + str(dR) + " and R = " + str(R))
-
         return dS, dI, dR
 
-    # def step_noise(self, dX):
-    #     var = abs(dX / 2)
-    #     noise = np.random.normal(0.0, var)
-    #
-    #     if (noise > dX and dX >= 0) or (noise < dX and dX <= 0):
-    #         return dX
-    #     return noise
-
-    # def noise(self, X_diff, mean=0, var_factor=0.5):
-    #     # Create an array containing noise values with the specified mean and
-    #     # variance.
-    #     X_noise = np.random.normal(mean, np.abs(X_diff * var_factor))
-    #     # Check if X_noise is smaller than X_diff and X_diff is bigger than 0
-    #     # for each element. This is needed to change all noise values that are
-    #     # too large with the np.where function. The opposite is also done to
-    #     # change values that are too small.
-    #     pos_condition = np.all([X_noise <= X_diff, X_diff >= 0], axis=0)
-    #     neg_condition = np.all([X_noise >= X_diff, X_diff <= 0], axis=0)
-    #     # Now check whether either one of the conditions is true for all
-    #     # elements so that we can use it for np.where. It is used to change all
-    #     # X_noise values that are bigger than their corresponding value in
-    #     # X_diff if X_diff is positive and all X_noise values that are smaller
-    #     # than their corresponding value in X_diff if X_diff is negative to the
-    #     # values in X_diff. It basically sets boundaries for the values of
-    #     # X_noise so that the absolute values of X_noise are always smaller
-    #     # than or equal to the absolute values of X_diff. The reason why it is
-    #     # complicated is that these statements also make it so that values that
-    #     # are negative stay negative and values that are positive stay positive.
-    #     condition = np.any([pos_condition, neg_condition], axis=0)
-    #     # Set all noise values to be within the boundaries.
-    #     X_bounded_noise = np.where(condition, X_noise, X_diff)
-    #
-    #     # Now make it so that the previous noise values are added to the
-    #     # current noise value for each noise value.
-    #     return np.cumsum(X_bounded_noise)
 
     def dS(self, S, I):
         """Calculates the difference in the amount of susceptible people for
         a single timestep."""
         return -self.beta * (S * I / self.N)
 
+
     def dI(self, S, I):
         """Calculates the difference in the amount of infected people for
         a single timestep."""
         return -self.dS(S, I) - self.dR(I)
+
 
     def dR(self, I):
         """Calculates the difference in the amount of recovered/dead people for
         a single timestep."""
         return self.rec_rate * I
 
-    # def add_stochasticity(self):
-    #     S_diff = np.diff(self.S)
-    #     R_diff = np.diff(self.R)
-    #
-    #     S_noise = self.noise(S_diff)
-    #     R_noise = self.noise(R_diff)
-    #
-    #     self.S[1:] += S_noise
-    #     self.I[1:] -= S_noise + R_noise
-    #     self.R[1:] += R_noise
-    #
-    #     print(self.S + self.I + self.R)
 
-    def noise(self, dX, mu, sigma_factor, X):
+    def noise(self, dX, X, mu=0.0, sigma_factor=0.5):
+        """Calculates the noise to be added to make the model stochastic. dX is
+        the amount of X that will be added. X is the last calculated value of
+        S or R. mu is the average value of the noise, while sigma factor is
+        used to calculate the standard deviation from mu."""
+        # Normally take sigma_factor * dX as the standard deviation, but when
+        # dX becomes too big, the standard deviation of the noise will be 10%
+        # of the total population.
         sigma = min(abs(sigma_factor * dX), abs(0.1 * self.N))
         noise = np.random.normal(mu, sigma)
         new_X = X + dX + noise
 
+        # Make sure that the noise doesn't cause the new value for X to take on
+        # impossible values.
         if new_X > self.N:
             return self.N - (X + dX)
         if new_X < 0:
             return -(X + dX)
         if abs(noise) > abs(dX):
+            # return dX if the signs of noise and dX are the same, otherwise
+            # return -dX
             return dX if abs(noise + dX) == abs(noise) + abs(dX) else -dX
         return noise
 
+
     def euler_maruyama(self):
-        """
-        https://www.math.kit.edu/ianm3/lehre/nummathfin2012w/media/euler_maruyama.pdf
-        https://en.wikipedia.org/wiki/Euler%E2%80%93Maruyama_method
-        """
+        """Runs the stochastic model using the Euler-Maruyama method."""
+        # First, create arrays for S, I and R of equal size to the time array
+        # and set the initial value as the first element of each array.
         self.S = np.zeros(self.t.shape)
         self.I = np.zeros(self.t.shape)
         self.R = np.zeros(self.t.shape)
         self.S[0] = self.S0
         self.I[0] = self.I0
         self.R[0] = self.R0
-        mu = 0.0
-        sigma_factor = 0.5
 
+        # Now, calculate the new values for S, I and R at each timestep and add
+        # noise
         for i in range(1, len(self.t)):
             dS = self.dS(self.S[i-1], self.I[i-1])
             dI = self.dI(self.S[i-1], self.I[i-1])
             dR = self.dR(self.I[i-1])
-            S_noise = self.noise(dS, mu, sigma_factor, self.S[i-1])
-            R_noise = self.noise(dR, mu, sigma_factor, self.R[i-1])
+            S_noise = self.noise(dS, self.S[i-1])
+            R_noise = self.noise(dR, self.R[i-1])
 
             self.S[i] = self.S[i-1] + dS + S_noise
             self.I[i] = self.I[i-1] + dI - S_noise - R_noise
             self.R[i] = self.R[i-1] + dR + R_noise
 
+
     def plot_SIR(self, t, S, I, R, title, max_number, animated=False):
         """Method to visualize the simulation with certain parameters.
-        Animated can be changed to "True" if an iterative visualization
-        is needed."""
+        Animated can be changed to "True" if the amount of S, I or R needs to
+        be known. Max_number is the largest number out of S, I and R."""
         S_label = "Susceptible"
         I_label = "Infected"
         R_label = "Recovered"
+
         if animated:
             S_label += ": " + str(int(S[-1]))
             I_label += ": " + str(int(I[-1]))
@@ -206,37 +173,39 @@ class SIR_model:
         plt.ticklabel_format(axis="y", style="sci", scilimits=(0,3))
         plt.legend()
 
-    def show_results(self, title, save=False, figname=None):
+
+    def show_results(self, title, figname=None):
         """When the simulation is over, this method can be used to visualize
         the results of the simulation."""
         max_number = find_max(self.S, self.I, self.R)
         self.plot_SIR(self.t, self.S, self.I, self.R, title, max_number)
 
-        if save:
-            if not figname:
-                figname = "fig"
+        if figname:
             plt.savefig("images/" + figname + ".svg")
         plt.show()
+
 
     def visualize(self, title):
         """This method can be used to visualize the simulation step by step."""
         max_number = find_max(self.S, self.I, self.R)
-
+        
+        # Loop over the entire t_max span, then draw the graph for every
+        # given t. After this is done, clear the plot and draw t+1.
         for i in range(1, self.t_max + 1):
             t = np.linspace(0, i, num=i+1)
-
             y_s = self.S[:i+1]
             y_i = self.I[:i+1]
             y_r = self.R[:i+1]
 
             self.plot_SIR(t, y_s, y_i, y_r, title, max_number, animated=True)
-
             plt.draw()
             plt.pause(0.00001)
 
+            # If the user closes the plot, stop the for loop.
             if not plt.get_fignums():
                 break
 
+            # Clear the plot until everything has been drawn.
             if i < self.t_max:
                 plt.clf()
             else:

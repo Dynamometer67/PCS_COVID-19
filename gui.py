@@ -1,16 +1,19 @@
 import tkinter as tk
+import sys
 from inspect import getargspec
+
 
 class GUI:
     def __init__(self, model, title):
-        """Initiates the GUI. expects a model which ONLY has parameters that
-        the user can adjust"""
+        """Initiates the GUI. Expects a model which ONLY has parameters that
+        the user can adjust in this GUI."""
         self.model = model
         self.root = tk.Tk()
         self.root.title(title)
         self.entry_frame = tk.Frame(master=self.root)
         self.button_frame = tk.Frame(master=self.root)
         self.entries = []
+
 
     def start(self):
         """Start the GUI so that the user can easily adjust the parameters of
@@ -19,7 +22,9 @@ class GUI:
         self.add_buttons()
         self.entry_frame.grid(row=0, column=0)
         self.button_frame.grid(row=1, column=0)
+        self.root.protocol("WM_DELETE_WINDOW", self.quit)
         self.root.mainloop()
+
 
     def add_entry(self, param_name, param_val, row):
         """Make an entry for a parameter. Label the entry with param_name and
@@ -32,6 +37,7 @@ class GUI:
         label.grid(row=row, column=0, padx=5, pady=2)
         entry.grid(row=row, column=1, padx=10, pady=2)
 
+
     def add_entries(self):
         """Makes an entry for all parameters in self.model."""
         # If this doesn't work anymore because the model has parameters which
@@ -42,11 +48,13 @@ class GUI:
         for i, (name, val) in enumerate(vars(self.model).items()):
             self.add_entry(name, val, i)
 
+
     def get_entries(self):
         """Returns the parameter names and their new corresponding values as a
         list of tuples."""
         return [(param_name, entry.get()) for param_name, entry in self.entries]
         
+
     def entries_to_model(self):
         """Update the parameter values of self.model to match the user input
         from the entries."""
@@ -54,17 +62,24 @@ class GUI:
         for name, val in new_params:
             vars(self.model)[name] = float(val)
 
+
     def ok(self):
         """Defines what happens when the user presses the 'OK' button"""
         self.entries_to_model()
         self.root.destroy()
+
+
+    def quit(self):
+        self.root.destroy()
+        sys.exit(0)
+
 
     def add_buttons(self):
         """Adds an 'OK' and a 'Quit' button to the GUI."""
         button1 = tk.Button(master=self.button_frame, text="OK",
                 command=self.ok)
         button2 = tk.Button(master=self.button_frame, text="Quit",
-                command=self.root.destroy)
+                command=self.quit)
 
         button1.grid(row=0, column=0, padx=5, pady=5)
         button2.grid(row=0, column=1, padx=5, pady=5)
