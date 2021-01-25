@@ -1,6 +1,10 @@
+# -----------------------------------------------------------------------------
+# Jesse van den Berge - 12410241
+# Mark van Hofwegen   - 12378348
+#
 # This file defines a function which can be used to create and simulate an SIR
 # model
-
+# -----------------------------------------------------------------------------
 from sir_model import SIR_model
 from gui import GUI
 import numpy as np
@@ -36,7 +40,7 @@ def get_infl_points():
         for growth_rate in np.linspace(0.1, 0.5, 5):
             x, y = get_mask_eff_data(growth_rate, rec_rate)
             i = find_infl_point(y)
-            if i :
+            if i:
                 infl_points.append(x[i])
                 print("rec_rate = " + str(rec_rate) + ", growth_rate = " +
                     str(growth_rate) + ", infl_point = " + str(x[i]))
@@ -49,32 +53,25 @@ def visualize_mask_eff(figname=None):
     plt.title("Influence of mask efficacy on infected")
     plt.xlabel("Mask efficacy")
     plt.ylabel("Total Infected")
+
     if figname:
         plt.savefig("images/" + figname + ".svg")
     plt.show()
 
 
 if __name__ == "__main__":
-    model = SIR_model(mask_cov=0.95, rec_rate=0.1, growth_rate=0.4, mask_eff=0.0, t_max=150)
-
-    # gui = GUI(model, "COVID-19 Simulation")
-    # # After this, the GUI has updated the values of the parameters of the model
-    # # and you can start working with the model.
-    # gui.start()
+    model = SIR_model()
+    gui = GUI(model, "COVID-19 Simulation")
+    # After this, the GUI has updated the values of the parameters of the model
+    # and you can start working with the model.
+    gui.start()
     try:
         # Put here what happens when the GUI succeeds.
         model.run()
-        # model.show_results("SIR simulation of COVID-19 spread", save=True, \
-        #         figname="fig1")
         model.visualize("SIR simulation of COVID-19 spread")
-        # print("Final S: " + str(int(model.S[-1])))
-        # print("Final I: " + str(int(model.I[-1])))
-        # print("Final R: " + str(int(model.R[-1])))
-        # print("Total infected: " + str(int(model.R[-1] + model.I[-1])))
-        # visualize_mask_eff("mask_on_infected")
-        # visualize_mask_eff()
+        visualize_mask_eff()
         # get_infl_points()
     except tk.TclError:
         # Put here what happens when the user quits the GUI (without pressing
         # the OK button).
-        print("aaaaaaaaaaaaaaaaa")
+        print("ERROR: GUI shutdown without pressing OK.")

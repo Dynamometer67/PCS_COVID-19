@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-Jesse van den Berge - XXXXXXXX
+Jesse van den Berge - 12410241
 Mark van Hofwegen   - 12378348
 
 This file explains how the figures and simulations can be reproduced.
@@ -9,6 +9,6 @@ Step 2: Fill in the specified parameters to reproduce the graphs.
 
 Here are the parameters used for every graph:
 - Figure 1: S=10^6, I=10^5, R=0, γ= 0.1, growthrate = 0.4, maskcov = 0.0, maskeff = 0.0.
-- Figure 2: S=10^6, I=10^5, R=0, γ= 0.1, growthrate = 0.4, maskcov = 1.0, maskeff = 0.2
-- Figure 3: S=10^6, I=10^5, R=0, γ= 0.1, growthrate = 0.4, maskcov = 1.0, maskeff = 0.4
-- Figure 4:
+- Figure 2: S=10^6, I=10^5, R=0, γ= 0.1, growthrate = 0.4, maskcov = 0.95, maskeff = 0.2.
+- Figure 3: S=10^6, I=10^5, R=0, γ= 0.1, growthrate = 0.4, maskcov = 1.0, maskeff = 0.4.
+- Figure 4: to reproduce this figure; uncomment line XX in "simulate.py"
