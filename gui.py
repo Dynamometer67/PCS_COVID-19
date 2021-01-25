@@ -1,3 +1,11 @@
+# -----------------------------------------------------------------------------
+# Jesse van den Berge - 12410241
+# Mark van Hofwegen   - 12378348
+#
+# This file contains a definition of the graphical user interface for setting
+# the parameters for the SIR model used in this project.
+# -----------------------------------------------------------------------------
+
 import tkinter as tk
 import sys
 from inspect import getargspec
