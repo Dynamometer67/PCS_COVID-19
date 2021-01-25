@@ -55,7 +55,8 @@ def visualize_mask_eff(figname=None):
 
 
 if __name__ == "__main__":
-    model = SIR_model(mask_cov=0.95, rec_rate=0.1, growth_rate=0.4, mask_eff=0.0, t_max=150)
+    model = SIR_model(mask_cov=0.95, rec_rate=0.1, growth_rate=0.4, mask_eff=0.65, t_max=150, stochastic=1,
+            S0=10**6, I0=10**5)
 
     # gui = GUI(model, "COVID-19 Simulation")
     # # After this, the GUI has updated the values of the parameters of the model
@@ -64,9 +65,9 @@ if __name__ == "__main__":
     try:
         # Put here what happens when the GUI succeeds.
         model.run()
-        # model.show_results("SIR simulation of COVID-19 spread", save=True, \
-        #         figname="fig1")
-        model.visualize("SIR simulation of COVID-19 spread")
+        model.show_results("SIR simulation of COVID-19 spread", save=True, \
+                figname="mask_eff_65")
+        # model.visualize("SIR simulation of COVID-19 spread")
         # print("Final S: " + str(int(model.S[-1])))
         # print("Final I: " + str(int(model.I[-1])))
         # print("Final R: " + str(int(model.R[-1])))
