@@ -1,11 +1,19 @@
-# This file defines a class for an SIR model
+# -----------------------------------------------------------------------------
+# Jesse van den Berge - XXXXXXXX
+# Mark van Hofwegen   - 12378348
+#
+# This file contains the main SIR model for this project.
+
 import numpy as np
 from scipy.integrate import odeint
 from matplotlib import pyplot as plt
 
+
 def find_max(S, I, R):
+    """This method finds the maximum number out of all three arrays."""
     max = np.array([S, I, R])
     return np.max(max)
+
 
 class SIR_model:
     def __init__(self, S0=10**6, I0=10**3, R0=0, t_max=150, growth_rate=0.4,
@@ -13,7 +21,6 @@ class SIR_model:
         """This method initiates the SIR model. In this model, S is the amount
         of people susceptible to the virus, I the amount of infected and R the
         amount of recovered or dead people."""
-        # Adjustable by the user
         self.S0 = S0
         self.I0 = I0
         self.R0 = R0
@@ -24,9 +31,13 @@ class SIR_model:
         self.mask_eff = mask_eff
         self.stochastic = stochastic
 
+
     def mask_factor(self):
+        """This method is to calculate the mask_factor based on the given
+        mask coverage and mask efficacy."""
         C_mask = self.mask_eff * self.mask_cov
         return 1 - 1.75 * C_mask + 0.75 * C_mask**2
+
 
     def run(self):
         """This method runs the simulation of the model."""
@@ -172,6 +183,9 @@ class SIR_model:
             self.R[i] = self.R[i-1] + dR + R_noise
 
     def plot_SIR(self, t, S, I, R, title, max_number, animated=False):
+        """Method to visualize the simulation with certain parameters.
+        Animated can be changed to "True" if an iterative visualization
+        is needed."""
         S_label = "Susceptible"
         I_label = "Infected"
         R_label = "Recovered"
