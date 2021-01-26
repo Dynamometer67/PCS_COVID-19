@@ -108,13 +108,11 @@ def visualize_noise(figname=None):
 
 
 if __name__ == "__main__":
-    # model = SIR_model()
-    # gui = GUI(model, "COVID-19 Simulation")
-    # # After the following method, the GUI has updated the values of the
-    # # parameters of the model and you can start working with the model.
-    # gui.start()
-    # # Put here what happens when the GUI succeeds.
-    # model.run()
-    # model.visualize("SIR simulation of COVID-19 spread")
-
-    visualize_noise("noise")
+    model = SIR_model(stochastic=0)
+    gui = GUI(model, "COVID-19 Simulation")
+    # After the following method, the GUI has updated the values of the
+    # parameters of the model and you can start working with the model.
+    gui.start()
+    # Put here what happens when the GUI succeeds.
+    model.run()
+    model.show_results("SIR simulation of COVID-19 spread")
