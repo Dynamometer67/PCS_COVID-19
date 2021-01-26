@@ -71,14 +71,50 @@ def visualize_mask_eff(figname=None):
     plt.show()
 
 
+def extract_noise():
+    """This function extracts the noise values by subtracting the
+    non-stochastic model from a stochastic model. returns the time array and an
+    array containing noise values for S, I and R in that order."""
+    model1 = SIR_model(stochastic=0)
+    model2 = SIR_model(stochastic=1)
+
+    model1.run()
+    model2.run()
+
+    S_noise = model2.S - model1.S
+    I_noise = model2.I - model1.I
+    R_noise = model2.R - model1.R
+
+    return model1.t, S_noise, I_noise, R_noise
+
+
+def visualize_noise(figname=None):
+    """This function plots the noise values over time. Saves the resulting
+    figure with the name figname if figname is given."""
+    t, S_noise, I_noise, R_noise = extract_noise()
+    plt.plot(t, S_noise, 'b-', label="S noise")
+    plt.plot(t, I_noise, 'r-', label="I noise")
+    plt.plot(t, R_noise, 'g-', label="R noise")
+
+    plt.ticklabel_format(axis="y", style="sci", scilimits=(0,3))
+    plt.title("Visualization of the noise")
+    plt.xlabel("Time (days)")
+    plt.ylabel("Noise value")
+    plt.legend()
+
+    if figname:
+        plt.savefig("images/" + figname + ".svg")
+    plt.show()
+
+
 if __name__ == "__main__":
-    model = SIR_model()
-    gui = GUI(model, "COVID-19 Simulation")
-    # After the following method, the GUI has updated the values of the
-    # parameters of the model and you can start working with the model.
-    gui.start()
-    # Put here what happens when the GUI succeeds.
-    model.run()
-    model.visualize("SIR simulation of COVID-19 spread")
-    # visualize_mask_eff()
-    # get_infl_points()
+    # model = SIR_model()
+    # gui = GUI(model, "COVID-19 Simulation")
+    # # After the following method, the GUI has updated the values of the
+    # # parameters of the model and you can start working with the model.
+    # gui.start()
+    # # Put here what happens when the GUI succeeds.
+    # model.run()
+    # model.visualize("SIR simulation of COVID-19 spread")
+
+    visualize_noise("noise")

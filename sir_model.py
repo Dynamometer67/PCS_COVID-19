@@ -135,7 +135,7 @@ class SIR_model:
         self.R[0] = self.R0
 
         # Now, calculate the new values for S, I and R at each timestep and add
-        # noise
+        # noise.
         for i in range(1, len(self.t)):
             dS = self.dS(self.S[i-1], self.I[i-1])
             dI = self.dI(self.S[i-1], self.I[i-1])

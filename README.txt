@@ -98,6 +98,10 @@ Reproducing the figures:
           "visualize_mask_eff()" in the main function and comment all the other
           code in the main function in simulate.py.
 
+        - Figure 10: To reproduce this figure, use the function
+          "visualize_noise()" in the main function and comment all the other
+          code in the main function in simulate.py.
+
         - Table 1: The data for this table can be obtained by using the
           function "get_infl_points()" in the main function of simulate.py
           and commenting all the other code in the main function.
